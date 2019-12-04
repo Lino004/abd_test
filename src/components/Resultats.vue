@@ -15,14 +15,32 @@
               :items="data"
               class="elevation-1"
               hide-default-footer
-            ></v-data-table>
+            >
+              <template v-slot:item.score="{ item }">
+                <v-chip :color="getColor(item)" dark>{{ item.score }}</v-chip>
+              </template>
+              <template v-slot:item.chrono="{ item }">
+                <strong dark>{{ item.chrono }} s</strong>
+              </template>
+            </v-data-table>
           </v-container>
           <v-container>
             <p class="headline font-weight-bold text-center">Score tatal du test : {{score}} </p>
-            <p class="headline red--text font-weight-bold text-center"> {{message}} </p>
-            <div>
-              <v-btn rounded small color="red" class="white--text">Retourner à l'acceuil</v-btn>
-            </div>
+            <p class="headline font-weight-bold text-center">Temps total : {{time}} </p>
+            <p class="headline font-weight-bold text-center" :class="score <= 86 ? 'red--text' : 'green--text'"> {{message}} </p>
+            <v-row justify="space-between">
+              <v-col md="4">
+                <v-btn rounded color="amber" @click="$router.push('/')">Retourner à l'acceuil</v-btn>
+              </v-col>
+              <v-col md="4" class="text-end">
+                <v-btn
+                  rounded
+                  color="amber"
+                  href="http://abc.futurix.tech/la-dyslexie/">
+                  En savoir plus
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-container>
         </v-card>
       </v-flex>
@@ -32,6 +50,10 @@
 </template>
 
 <script>
+import moment from 'moment'
+
+moment().locale('fr')
+
 export default {
   props: [ 'data' ],
   data: () => ({
@@ -49,10 +71,28 @@ export default {
       });
       return score
     },
+    time() {
+      let time = 0
+      this.data.map(el => el.chrono).forEach(el => {
+        time += el
+      });
+      return moment(time, 's').format('H[h] m[mn] s[ss]')
+    },
     message() {
       if (this.score <= 86) return 'Votre enfant a un pourcentage jugé à risque de la dyslexie'
       return 'Votre enfant n’est pas à risque'
-    }
+    },
+  },
+  methods: {
+    getColor (score) {
+      if (score.titre === 'Graphèmes') return score.score <= 20 ? 'red' : 'green'
+      if (score.titre === 'Lecture de voyelles complexes') return score.score <= 15 ? 'red' : 'green'
+      if (score.titre === 'Lecture de syllabes simples') return score.score <= 14 ? 'red' : 'green'
+      if (score.titre === 'Lecture de syllabes complexes') return score.score <= 7 ? 'red' : 'green'
+      if (score.titre === 'Lecture de mots réguliers') return score.score <= 11 ? 'red' : 'green'
+      if (score.titre === 'Lecture de mots irréguliers') return score.score <= 8 ? 'red' : 'green'
+      return ''
+    },
   }
 }
 </script>

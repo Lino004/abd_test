@@ -68,7 +68,7 @@
                   small
                   color="red"
                   class="white--text"
-                  @click="$router.push('/test')"
+                  @click="$router.replace('/test')"
                   v-if="showText !== 0">Demarrer</v-btn>
               </v-container>
               <v-btn
