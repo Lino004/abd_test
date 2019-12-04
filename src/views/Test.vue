@@ -86,8 +86,8 @@
       </v-container>
 
       <!-- Composant resutat du test -->
-      <Resultat/>
-      
+      <Resultat :data="tabData"/>
+
     </v-col>
   </v-row>
 </template>
@@ -97,6 +97,7 @@ import jsonData from '@/config/data'
 import Resultat from '@/components/Resultats.vue'
 
 export default {
+  name: 'test',
   components: { Resultat },
   data: () => ({
     tabData: [],
