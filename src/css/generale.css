@@ -1,0 +1,10 @@
+.border{
+  border: solid 1px;
+  border-radius: 5px;
+}
+.content{
+  height: 250px;
+}
+.link{
+  text-decoration-line: none;
+}
